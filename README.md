@@ -42,8 +42,8 @@ This project creates a stand alone javascript bundle with the Wayke In Location 
 |------------|--------------------|----------|--------------------|
 | argument 1 | number             | true     | latitude           |
 | argument 2 | number             | true     | longitude          |
-| argument 3 | number             | false    | Max distance in km |
-| argument 4 | InLocationCallback | false    | Callback method    |
+| argument 3 | number             | true     | Max distance in km |
+| argument 4 | InLocationCallback | true     | Callback method    |
 
 ### InLocationCallback
 | Property     | Type     |
