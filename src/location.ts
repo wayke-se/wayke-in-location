@@ -1,13 +1,22 @@
-export const getCoords = async () => {
-  const pos = await new Promise<Position>((resolve, reject) => {
+export interface Coordinates {
+  readonly accuracy: number;
+  readonly altitude: number | null;
+  readonly altitudeAccuracy: number | null;
+  readonly heading: number | null;
+  readonly latitude: number;
+  readonly longitude: number;
+  readonly speed: number | null;
+}
+
+export interface Position {
+  readonly coords: Coordinates;
+  readonly timestamp: number;
+}
+
+export const getCoords = async () =>
+  new Promise<Position>((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject);
   });
-
-  return {
-    lat: pos.coords.longitude,
-    lng: pos.coords.latitude,
-  };
-};
 
 const deg2rad = (deg: number) => deg * (Math.PI / 180);
 

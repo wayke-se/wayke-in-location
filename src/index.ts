@@ -1,11 +1,8 @@
-import { getCoords, getDistanceFromLatLonInKm } from './location';
+import { getCoords, getDistanceFromLatLonInKm, Position } from './location';
 
 interface Metadata {
   distance: number;
-  userLocation: {
-    lat: number;
-    lng: number;
-  };
+  clientPosition: Position;
 }
 
 const InLocation = async (
@@ -31,16 +28,21 @@ const InLocation = async (
   }
 
   try {
-    const currentLocation = await getCoords();
-    const distance = getDistanceFromLatLonInKm(lat, lng, currentLocation.lat, currentLocation.lng);
+    const clientPosition = await getCoords();
+    const distance = getDistanceFromLatLonInKm(
+      lat,
+      lng,
+      clientPosition.coords.latitude,
+      clientPosition.coords.longitude
+    );
     if (distance <= maxDistance) {
       callback(true, {
-        userLocation: currentLocation,
+        clientPosition,
         distance,
       });
     } else {
       callback(false, {
-        userLocation: currentLocation,
+        clientPosition,
         distance,
       });
     }

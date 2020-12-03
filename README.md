@@ -1,6 +1,8 @@
 # Wayke Valuation
 
-This project creates a stand alone javascript bundle with the Wayke Valuation which can be directly referenced from HTML - without manually building the component from source.
+Check if client is inside the circle given a `latitude`, `longitude` and `max distance`. Uses the `Geolocation API`.
+
+This project creates a stand alone javascript bundle with the Wayke In Location which can be directly referenced from HTML - without manually building the component from source.
 
 
 ## Usage 1: Auto
@@ -13,22 +15,18 @@ This project creates a stand alone javascript bundle with the Wayke Valuation wh
     <meta name="viewport" content="width=device-width" />
   </head>
   <body>
-    <script src="https://cdn.wayke.se/public-assets/wayke.valuation.v1.0.0.js"></script>
+    <script src="https://cdn.wayke.se/public-assets/wayke.in-location.v1.0.0.js"></script>
     <!--
         A development version is available here:
-        <script src="https://test-cdn.wayketech.se/public-assets/wayke.valuation.v1.0.0.js"></script>
+        <script src="https://test-cdn.wayketech.se/public-assets/wayke.in-location.v1.0.0.js"></script>
     -->
     <script>
-      new Wayke.InLocation(57.7043183, 11.9646843, 1000, (inLocation) => {
+      new Wayke.InLocation(57.7043183, 11.9646843, 1000, (inLocation, metadata) => {
         if (inLocation) {
-          new Wayke.Valuation({
-            branches: [{ id: '51577a27-7c62-42da-8fda-0b158c160868', name: 'Branch 1'}],
-            conditionReduction: {
-              veryGood: 0.9,
-              good: 0.8,
-              ok: 0.7,
-            },
-          })
+          // is in location
+          console.log(metadata);
+        } else {
+          // is not in location
         }
       })
     </script>
@@ -37,76 +35,57 @@ This project creates a stand alone javascript bundle with the Wayke Valuation wh
 </html>
 ```
 
-## Usage 2: Manual
-
-Provide a custom button in order to start the widget
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-  </head>
-  <body>
-    <script src="https://cdn.wayke.se/public-assets/wayke.valuation.v1.0.0.js"></script>
-    <!--
-      A development version is available here:
-      <script src="https://test-cdn.wayketech.se/public-assets/wayke.valuation.v1.0.0.js"></script>
-    -->
-    <script>
-      function openWaykeValuation() {
-        const app = new Wayke.Valuation({
-          branches: [{ id: '51577a27-7c62-42da-8fda-0b158c160868', name: 'Branch 1'}],
-          conditionReduction: {
-            veryGood: 0.9,
-            good: 0.8,
-            ok: 0.7,
-          },
-          manualTrigger: true,
-        })
-        app.render();
-      }
-    </script>
-
-    <input type="button" value="click me" onClick="javascript: openWaykeValuation();" />
-  </body>
-</html>
-```
-
 ## Models
-### Valuation
+### InLocation function
 
-| Property           | Type               | Required |
-|--------------------|--------------------|----------|
-| branches           | Branch[]           | true     |
-| conditionReduction | ConditionReduction | true     |
-| manualTrigger      | boolean            | false    |
+| Property   | Type               | Required | Description        |
+|------------|--------------------|----------|--------------------|
+| argument 1 | number             | true     | latitude           |
+| argument 2 | number             | true     | longitude          |
+| argument 3 | number             | false    | Max distance in km |
+| argument 4 | InLocationCallback | false    | Callback method    |
 
-* `branches` - List of `Branch`-items. Must contain at least one entry.
-* `conditionReduction` - Instructions on how much valuated price should be reduces given a condition.
-* `manualTrigger` - An *optional* flag. If set to true, then the default floating panel will not be attach to the DOM.
-The modal is opened by calling the Valuation's instance `render`-method.
+### InLocationCallback
+| Property     | Type     |
+|--------------|----------|
+| argument 1   | boolean  |
+| argument 1   | Metadata |
 
-### Branch
-| Property | Type   | Required |
-|----------|--------|----------|
-| id       | string | true     |
-| name     | string | false    |
+### Metadata
+| Property       | Type     |
+|----------------|----------|
+| distance       | number   |
+| clientPosition | Position |
 
-### ConditionReduction
-| Property | Type   | Required |
-|----------|--------|----------|
-| veryGood | number | true     |
-| good     | number | true     |
-| ok       | number | true     |
+### Position (GeolocationPosition)
+https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition
+
+| Property  | Type        |
+|-----------|-------------|
+| coords    | Coordinates |
+| timestamp | number      |
+
+
+### Coordinates (GeolocationPosition.coords)
+https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition/coords
+
+| Property         | Type        |
+|------------------|-------------|
+| accuracy         | number      |
+| altitude         | number \| null |
+| altitudeAccuracy | number \| null |
+| heading          | number \| null |
+| latitude         | number \| null |
+| longitude        | number \| null |
+| speed            | number \| null |
+
 
 
 ## Available Sources
 | Version | Environment | Url                                                                   |
 |---------|-------------|-----------------------------------------------------------------------|
-| 1.0.0   | Production  | https://cdn.wayke.se/public-assets/wayke.valuation.v1.0.0.js          |
-| 1.0.0   | Development | https://test-cdn.wayketech.se/public-assets/wayke.valuation.v1.0.0.js |
+| 1.0.0   | Production  | https://cdn.wayke.se/public-assets/wayke.in.valuation.v1.0.0.js          |
+| 1.0.0   | Development | https://test-cdn.wayketech.se/public-assets/wayke.in-valuation.v1.0.0.js |
 
 ## Develop
 
@@ -114,17 +93,6 @@ The modal is opened by calling the Valuation's instance `render`-method.
 ```bash
 npm install
 ```
-
-Create an `.env` file in root.
-```
-WAYKE_HOST=YOUR_HOST_1,YOUR_HOST_2
-WAYKE_URL=https://test-ext-api.wayketech.se
-WAYKE_CONDITION_REDUCTION_VERY_GOOD=0.9
-WAYKE_CONDITION_REDUCTION_GOOD=0.8
-WAYKE_CONDITION_REDUCTION_OK=0.7
-WAYKE_BRANCHES=[{"id": "51577a27-7c62-42da-8fda-0b158c160868", "name": "Name1"}]
-```
-
 ### Start
 
 Starts a local dev-server running at http://localhost:5000/ with watch
@@ -139,4 +107,12 @@ Builds production to `./build`
 
 ```bash
 npm run build
+```
+
+## Build Development
+
+Builds development to `./build`
+
+```bash
+npm run build:dev
 ```
