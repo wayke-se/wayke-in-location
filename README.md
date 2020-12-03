@@ -1,4 +1,4 @@
-# Wayke Valuation
+# Wayke In Location
 
 Check if client is inside the circle given a `latitude`, `longitude` and `max distance`. Uses the `Geolocation API`.
 
