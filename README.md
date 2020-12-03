@@ -21,7 +21,7 @@ This project creates a stand alone javascript bundle with the Wayke In Location 
         <script src="https://test-cdn.wayketech.se/public-assets/wayke.in-location.v1.0.0.js"></script>
     -->
     <script>
-      new Wayke.InLocation(57.7043183, 11.9646843, 1000, (inLocation, metadata) => {
+      new WaykeInLocation.default(57.7043183, 11.9646843, 1000, (inLocation, metadata) => {
         if (inLocation) {
           // is in location
           console.log(metadata);

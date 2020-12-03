@@ -10,7 +10,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: `wayke.in-location.v${version}.js`,
-    library: 'Wayke',
+    library: 'WaykeInLocation',
     libraryTarget: 'umd',
   },
   resolve: {
