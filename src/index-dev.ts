@@ -8,7 +8,8 @@ window.addEventListener('DOMContentLoaded', (_) => {
   InLocation(lat, lng, distance, (inLocation, metadata) => {
     const node = document.createElement('div');
     node.innerHTML = `
-      <h1>${inLocation ? 'In location' : 'Not in location'}</h1>
+      <h1>Wayke In Location</h1>
+      <h3>Is in location: ${inLocation ? 'Yes' : 'No'}</h3>
       <table>
         <tr>
           <th>Type</th>
